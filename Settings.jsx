@@ -23,7 +23,7 @@ module.exports = ({ getSetting, updateSetting}) => {
     <div className="prefix-remove-channel">
       <div className="prefix-remove-channel">
       <TextInput
-      note="Set Prefix for the plugin to add. Leave empty to add nothing."
+      note="Set Prefix for the plugin to add. Requires reload to apply changes."
       defaultValue={getSetting('prefix', '')}
       required={false}
       onChange={val => updateSetting('prefix', val)}
@@ -32,7 +32,7 @@ module.exports = ({ getSetting, updateSetting}) => {
     </TextInput>
     </div><div className="prefix-remove-channel">
     <TextInput
-      note="Set Prefix for the plugin to add. Leave empty to add nothing."
+      note="Set Prefix for the plugin to add. Requires reload to apply changes."
       defaultValue={getSetting('suffix', '')}
       required={false}
       onChange={val => updateSetting('suffix', val)}
