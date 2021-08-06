@@ -5,8 +5,7 @@ const List = require("./components/List");
 const { TextInput, SwitchItem, SliderInput, Toggle } = require('powercord/components/settings');
 const { dialog } = require("electron");
 
-module.exports = function (props) {
-  const { getSetting, toggleSetting, updateSetting } = props;
+module.exports = ({ getSetting, updateSetting}) => {
   const [channels, setChannels] = React.useState(JSON.parse(window.localStorage.getItem("excluded-channel")) ?? []);
   const [selectedChannelID, setSelectedChannelID] = React.useState(channels[0] ?? "");
   const [channelTextInputText, setChannelInputText] = React.useState("");
@@ -15,41 +14,43 @@ module.exports = function (props) {
   const [selectedserverID, setSelectedserverID] = React.useState(servers[0] ?? "");
   const [serverTextInputText, setServerInputText] = React.useState("");
 
-  const [maxEmoji, setMaxEmoji] = React.useState(window.localStorage.getItem("max-emoji-per-word") ?? 1);
-  React.useEffect(() => {
-    window.localStorage.setItem("max-emoji-per-word", maxEmoji);
-  }, [maxEmoji]);
-
   const { getChannel } = getModule(["getChannel"], false);
   const { getUser } = getModule(["getUser"], false);
   const { getGuild } = getModule(["getGuild"], false);
 
 
   return (
-    <div>
-      <div className="emojifier-remove-channel">
+    <div className="prefix-remove-channel">
+      <div className="prefix-remove-channel">
+      <TextInput
+      note="Set Prefix for the plugin to add. Leave empty to add nothing."
+      defaultValue={getSetting('prefix', '')}
+      required={false}
+      onChange={val => updateSetting('prefix', val)}
+    >
+      Prefix
+    </TextInput>
+    </div><div className="prefix-remove-channel">
+    <TextInput
+      note="Set Prefix for the plugin to add. Leave empty to add nothing."
+      defaultValue={getSetting('suffix', '')}
+      required={false}
+      onChange={val => updateSetting('suffix', val)}
+    >
+      Suffix
+    </TextInput>
+    </div>
 
-      </div>
-
-      <div className="emojifier-remove-channel">
-        <h2>Max emoji per word</h2>
-        <input type="range" min="0" max="100" step="1"
-          value={maxEmoji} onChange={e => setMaxEmoji(e.target.value)} />
-        <p>{`There will be a maximum of ${maxEmoji} emoji per word`}</p>
-      </div>
-
-      <div class="divider-3573oO dividerDefault-3rvLe-"></div>
 
 
-      <div className="emojifier-remove-channel">
-        <h2>Excluded channels</h2>
+      <div className="prefix-remove-channel">
         <TextInput
           note="Channel ID of an new excluded channel (you can also put a user id to ignore dm with specific user)"
           required={false}
           onChange={setChannelInputText}
           value={channelTextInputText}
         >
-          Excluded channels &amps; excluded users
+          Excluded channels & excluded users
        </TextInput>
         <List
           item={channels}
@@ -105,8 +106,8 @@ module.exports = function (props) {
 
       <div class="divider-3573oO dividerDefault-3rvLe-"></div>
 
-      <div className="emojifier-remove-channel">
-        <h2>Excluded servers</h2>
+      <div className="prefix-remove-channel">
+        
         <TextInput
           note="Server ID of an server to exclude"
           required={false}

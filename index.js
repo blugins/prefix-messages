@@ -1,37 +1,36 @@
 const { Plugin } = require('powercord/entities');
 const Settings = require("./Settings");
 const { inject, uninject } = require("powercord/injector");
-const generateEmojipasta = require("./generateEmojiPasta");
 const { getModule, getModuleByDisplayName, React } = require('powercord/webpack');
 const getSettings = require("./getSettings");
 
 
-module.exports = class Emojifier extends Plugin {
-  async startPlugin() {
+module.exports = class PrefSuf extends Plugin {
+  startPlugin() {
+    let prefix = this.settings.get('prefix', '')
+    let suffix = this.settings.get('suffix', '')
     // set the config if none is set
     if (!window.localStorage.getItem("excluded-server"))
       window.localStorage.setItem("excluded-server", "[]");
     if (!window.localStorage.getItem("excluded-channel"))
       window.localStorage.setItem("excluded-channel", "[]");
-    if (!window.localStorage.getItem("max-emoji-per-word"))
-      window.localStorage.setItem("max-emoji-per-word", "2");
-
+    
     this.loadStylesheet("style.scss");
 
-    powercord.api.settings.registerSettings("emojify", {
+    powercord.api.settings.registerSettings("prefix", {
       category: this.entityID,
-      label: "Emojifier",
+      label: "Prefix",
       render: Settings
     });
-
+    
     setImmediate(async () => {
       const messageEvents = await getModule(["sendMessage"], true);
       if (!messageEvents)
         throw new ReferenceError("Failed to load message events");
-
-      inject("emojifier-injection-id", messageEvents, "sendMessage", function (args) {
+      
+      inject("prefix-injection", messageEvents, "sendMessage", function (args) {
         const { getChannel } = getModule(["getChannel"], false);
-        const emojiPasta = generateEmojipasta(args[1].content);
+        const modMessage = prefix + args[1].content + suffix
         const channel = getChannel(args[0]);
         const { exludedChannel, exludedServer } = getSettings();
         const excludedChannel = exludedChannel.map(e => e.split(/(\d+)/)[1]);
@@ -50,7 +49,7 @@ module.exports = class Emojifier extends Plugin {
           if (channel.recipients.includes(server))
             return args;
         }
-        args[1].content = emojiPasta;
+        args[1].content = modMessage;
         return args;
       });
     });
@@ -58,8 +57,8 @@ module.exports = class Emojifier extends Plugin {
   }
 
   pluginWillUnload() {
-    powercord.api.settings.unregisterSettings("emojify");
-    powercord.api.settings.unregisterCommand("emojify");
-    uninject("emojifier-injection-id");
+    powercord.api.settings.unregisterSettings("Prefix");
+    powercord.api.settings.unregisterCommand("Prefix");
+    uninject("prefix-injection");
   }
 };

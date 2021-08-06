@@ -1,7 +1,7 @@
 {
-  "name": "emojifier",
-  "version": "1.6.0",
-  "description": "Transform ♻ any 🈸 message 📕📩 into 🤓 a emojipasta 🍝🌋",
-  "author": "Vincent",
+  "name": "prefix",
+  "version": "1.0.0",
+  "description": "Add prefixes to your messages.",
+  "author": "Munix",
   "license": "MIT"
 }
