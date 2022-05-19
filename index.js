@@ -26,8 +26,8 @@ module.exports = class PrefSuf extends Plugin {
 
     powercord.api.settings.registerSettings('prefix', {
       category: this.entityID,
-      label: 'Prefix',
-      render: Settings
+      label: 'Prefix Messages',
+      render: Settings,
     });
 
     inject('prefix-injection', messageMdl, 'sendMessage', (args) => {
