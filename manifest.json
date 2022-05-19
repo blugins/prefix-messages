@@ -1,7 +1,7 @@
 {
-  "name": "prefix",
+  "name": "Prefix Message",
   "version": "1.0.0",
   "description": "Add prefixes to your messages.",
-  "author": "Munix",
+  "author": "Munix, botato (rewrite)",
   "license": "MIT"
 }
